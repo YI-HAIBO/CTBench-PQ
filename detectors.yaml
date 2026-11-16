@@ -1,0 +1,120 @@
+# CTBench-PQ 检测器环境锁定清单（A2）
+# 目的：使 LLM 检测器评测可精确复现。每个检测器记录：模型 ID、托管平台、
+#       温度、max_tokens、超时、prompt 策略、评测日期。
+# 版本说明：LLM 供应商模型版本会漂移，历史结果以本清单锁定的环境为准。
+
+benchmark: CTBench-PQ
+release: v1.0
+last_evaluated: 2026-11-12
+temperature: 0.0            # 全部 LLM 检测器统一温度 0.0
+prompt_strategy: S1         # 主评测策略（S1 朴素 / S2 校准 / S3 校准+示范）
+
+detectors:
+  # ---- D1：LLM 智能体（主检测器，best-of-two 上界）----
+  D1_Agents-A1:
+    model_id: Agents-A1
+    platform: intern-ai        # 书生·浦源 discovery-api（intern-ai.org.cn）
+    base_url: https://discovery-api.intern-ai.org.cn/v1/chat/completions
+    temperature: 0.0
+    max_tokens: 16000          # 推理模型预算，实测最高 9846 completion_token
+    timeout_s: 300
+    note: 推理模型；reasoning 消耗大量 token，4000 会截断出 None，须 ≥5139
+
+  # ---- D2：领域 CT 模型（Atria-Dawn-Preview）----
+  D2_Atria-Dawn-Preview:
+    model_id: Atria-Dawn-Preview
+    platform: intern-ai
+    base_url: https://discovery-api.intern-ai.org.cn/v1/chat/completions
+    temperature: 0.0
+    max_tokens: 16000
+    timeout_s: 300
+
+  # ---- D2b：Atria-Dawn（同平台代表，merged-benchmark 预测未发布）----
+  D2b_Atria-Dawn:
+    model_id: Atria-Dawn
+    platform: intern-ai
+    base_url: https://discovery-api.intern-ai.org.cn/v1/chat/completions
+    temperature: 0.0
+    max_tokens: 16000
+    timeout_s: 300
+    note: 同平台代表；Atria-Dawn-Preview 变体结论以 extended 集为准
+
+  # ---- 扩展集检测器 ----
+  intern-s2:
+    model_id: intern-s2
+    platform: intern-ai
+    base_url: https://discovery-api.intern-ai.org.cn/v1/chat/completions
+    temperature: 0.0
+    max_tokens: 16000
+    timeout_s: 300
+
+  deepseek-v4-flash:
+    model_id: deepseek-v4-flash
+    platform: sensenova
+    temperature: 0.0
+    max_tokens: 8192           # 默认；实测 supportsReasoning=false 仍产 reasoning_tokens
+    timeout_s: 300
+
+  sensenova-6.8-flash-lite:
+    model_id: sensenova-6.8-flash-lite
+    platform: sensenova
+    temperature: 0.0
+    max_tokens: 8192
+    timeout_s: 300
+
+  # ---- 独立平台外部 sanity check ----
+  dots3-note-prev:
+    model_id: dots3-note-prev
+    platform: independent       # note3-prev-api.askdiandian.com，第三方端点
+    base_url: https://note3-prev-api.askdiandian.com
+    temperature: 0.0
+    note: 独立端点；底层模型族未公开，作为外部点使用
+
+  # ---- L2 独立平台模型（2026-11-16 新增，agnès-ai / mosi 平台）----
+  agnes-3.0-flash:
+    model_id: agnes-3.0-flash
+    platform: independent       # api.agnes-ai.cn，独立平台
+    base_url: https://api.agnes-ai.cn/v1/chat/completions
+    temperature: 0.0
+    max_tokens: 16000
+    timeout_s: 300
+    note: L2 独立平台补强；2026-11-16 加入评测
+
+  nex-n2.6:
+    model_id: nex-n2.6
+    platform: independent       # api.mosi.cn，独立平台
+    base_url: https://api.mosi.cn/v1/chat/completions
+    temperature: 0.0
+    max_tokens: 16000
+    timeout_s: 300
+    note: L2 独立平台补强；推理模型，慢（实测 ~18.8s/调用）
+
+  kilo-auto/free:
+    model_id: kilo-auto/free
+    platform: independent       # api.kilo.ai 网关
+    base_url: https://api.kilo.ai/api/gateway
+    temperature: 0.0
+    status: unavailable         # 2026-11-16 实测 HTTP 404，网关不支持标准 payload
+    note: 端点 404 不可用，未纳入评测
+
+  # ---- D3：非 LLM 规则基线（离线可复现对照）----
+  D3_mock-rule-v1:
+    model_id: mock-rule-v1
+    platform: offline
+    temperature: n/a
+    note: 本地启发式；不依赖 API，离线可复现
+
+# ---- 受限（HTTP 429）未纳入评测的模型 ----
+rate_limited_models:
+  - deepseek-v4-flash-vision
+  - glm-5.3
+  - qwen3.8-27b
+  note: 共享平台反复 429，未获完整评测；明确披露而非静默省略
+
+# ---- 工具基线 ----
+tool_baseline:
+  binsec: 0.11.3
+  binsec_flags: "-sse -checkct -checkct-leak-info halt -sse-depth 65536 -smt-solver z3"
+  dudect: verified (Welch t-test, donnabad 外部验证)
+  compiler: "gcc -O2 (gcc 15.2)"
+  hardware: "Intel i7-10700"

@@ -1,0 +1,155 @@
+{
+  "meta": {
+    "name": "CT micro-benchmark (Path B tool calibration)",
+    "purpose": "Self-contained C functions to calibrate binsec -checkct constant-time detection (supports §3.6 CT-defect detectability criterion).",
+    "interface": "global g_secret[64] (secret) / g_pub (public); compile gcc -g -static; run binsec -sse -checkct -sse-script <id>.ini <id>",
+    "n_defective": 12,
+    "n_clean": 12
+  },
+  "items": [
+    {
+      "item_id": "MB-D01",
+      "label": "defective",
+      "pattern": "sd-branch",
+      "function": "mb_d01_sd_branch"
+    },
+    {
+      "item_id": "MB-D02",
+      "label": "defective",
+      "pattern": "sd-table",
+      "function": "mb_d02_sd_table"
+    },
+    {
+      "item_id": "MB-D03",
+      "label": "defective",
+      "pattern": "sd-div",
+      "function": "mb_d03_sd_div"
+    },
+    {
+      "item_id": "MB-D04",
+      "label": "defective",
+      "pattern": "sd-write",
+      "function": "mb_d04_sd_write"
+    },
+    {
+      "item_id": "MB-D05",
+      "label": "defective",
+      "pattern": "sd-earlyexit",
+      "function": "mb_d05_sd_earlyexit"
+    },
+    {
+      "item_id": "MB-D06",
+      "label": "defective",
+      "pattern": "sd-loopbound",
+      "function": "mb_d06_sd_loopbound"
+    },
+    {
+      "item_id": "MB-D07",
+      "label": "defective",
+      "pattern": "sd-addr",
+      "function": "mb_d07_sd_addr"
+    },
+    {
+      "item_id": "MB-D08",
+      "label": "defective",
+      "pattern": "sd-cmovbranch",
+      "function": "mb_d08_sd_cmovbranch"
+    },
+    {
+      "item_id": "MB-D09",
+      "label": "defective",
+      "pattern": "sd-rotate-addr",
+      "function": "mb_d09_sd_rotate_addr"
+    },
+    {
+      "item_id": "MB-D10",
+      "label": "defective",
+      "pattern": "sd-compare",
+      "function": "mb_d10_sd_compare"
+    },
+    {
+      "item_id": "MB-D11",
+      "label": "defective",
+      "pattern": "sd-branch2",
+      "function": "mb_d11_sd_branch2"
+    },
+    {
+      "item_id": "MB-D12",
+      "label": "defective",
+      "pattern": "sd-table2",
+      "function": "mb_d12_sd_table2"
+    },
+    {
+      "item_id": "MB-C01",
+      "label": "clean",
+      "pattern": "ct-select",
+      "function": "mb_c01_ct_select"
+    },
+    {
+      "item_id": "MB-C02",
+      "label": "clean",
+      "pattern": "ct-fixedloop",
+      "function": "mb_c02_ct_fixedloop"
+    },
+    {
+      "item_id": "MB-C03",
+      "label": "clean",
+      "pattern": "ct-mask",
+      "function": "mb_c03_ct_mask"
+    },
+    {
+      "item_id": "MB-C04",
+      "label": "clean",
+      "pattern": "ct-dummyscan",
+      "function": "mb_c04_ct_dummyscan"
+    },
+    {
+      "item_id": "MB-C05",
+      "label": "clean",
+      "pattern": "ct-cmov",
+      "function": "mb_c05_ct_cmov"
+    },
+    {
+      "item_id": "MB-C06",
+      "label": "clean",
+      "pattern": "ct-barrett",
+      "function": "mb_c06_ct_barrett"
+    },
+    {
+      "item_id": "MB-C07",
+      "label": "clean",
+      "pattern": "ct-ctmask",
+      "function": "mb_c07_ct_ctmask"
+    },
+    {
+      "item_id": "MB-C08",
+      "label": "clean",
+      "pattern": "ct-scan",
+      "function": "mb_c08_ct_scan"
+    },
+    {
+      "item_id": "MB-C09",
+      "label": "clean",
+      "pattern": "ct-swap",
+      "function": "mb_c09_ct_swap"
+    },
+    {
+      "item_id": "MB-C10",
+      "label": "clean",
+      "pattern": "ct-carry",
+      "function": "mb_c10_ct_carry"
+    },
+    {
+      "item_id": "MB-C11",
+      "label": "clean",
+      "pattern": "ct-ladder",
+      "function": "mb_c11_ct_ladder"
+    },
+    {
+      "item_id": "MB-C12",
+      "label": "clean",
+      "pattern": "ct-branchless",
+      "function": "mb_c12_ct_branchless"
+    }
+  ]
+}

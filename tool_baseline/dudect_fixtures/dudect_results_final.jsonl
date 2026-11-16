@@ -1,0 +1,9 @@
+{"item_id": "MB-D01", "verdict": "CT", "max_t": null, "note": "dudect CT（gcc -O2 把 if(secret&1) 分支向量化为无分支 SIMD，编译后恒时；binsec=insecure 源级分支）。KEY：gcc 缓解分支泄漏"}
+{"item_id": "MB-D03", "verdict": "CT", "max_t": null, "note": "dudect CT（i7-10700 32位 div 固定延迟，g_pub/d 变时泄漏不存在；binsec=secure 盲区）。KEY：div 盲区在本硬件不落地"}
+{"item_id": "MB-C01", "verdict": "CT", "max_t": null, "note": "dudect CT（ct-select 无分支，无误报对照）"}
+{"item_id": "MB-C06", "verdict": "CT", "max_t": null, "note": "dudect CT（ct-barrett 常量除 %23，魔数乘法恒时，无误报对照）"}
+{"item_id": "MB-D06", "verdict": "CT", "max_t": 0.97, "note": "dudect CT（sd-loopbound 弱信号 max_t≈0.97<10；反汇编有循环但时序差低于 dudect 阈值/VM 噪声；binsec=insecure 源级循环）。KEY：弱泄漏/循环缓解"}
+{"item_id": "MB-D09", "verdict": "CT", "max_t": 1.04, "note": "dudect CT（sd-rotate-addr 缓存泄漏 max_t≈1.04<10；单次测量内访问行<L1 容量，无缓存未命中；binsec=insecure 地址泄漏）。KEY：binsec 独有值，dudect 缓存方法论局限"}
+{"item_id": "KY-VERIFY-CT", "verdict": "CT", "max_t": null, "note": "dudect CT（Kyber verify/cmov 真实 PQC clean 锚点，无误报）"}
+{"item_id": "KY-CLEAN-8", "verdict": "CT", "max_t": null, "note": "dudect CT（poly_compress 修复后 *80635 移位近似恒时；binsec=insecure timeout 假阳性被 dudect 覆盖）。KEY：dudect 解决 binsec timeout-FP"}
+{"item_id": "KY-DEFECT-8", "verdict": "CT", "max_t": null, "note": "dudect CT（poly_compress 修复前 /KYBER_Q；gcc 15.2 编译为魔数乘法 imul $0x3afb7681 恒时，KyberSlash 被缓解；binsec=insecure timeout 低置信）。KEY：gcc 缓解 KyberSlash"}
