@@ -103,15 +103,27 @@ metrics + McNemar, (4) FDC-MI fusion. Expected key values:
 `./.github/workflows/reproduce.yml` re-runs the five-step pipeline
 (`reproduce.sh`: leakage check, merged ceiling, extended recompute, measured
 fusion, then the self-checking `analysis/verify_anchors.py` that asserts all
-six anchors above) on a fresh GitHub-hosted `ubuntu-latest` runner on every
-push to `master`/`main` and on every pull request. This provides a
-public, independently-hosted verification that any account can inspect,
-as a weaker substitute for a true third-party run.
+six anchors above) on fresh GitHub-hosted runners (`ubuntu-latest` +
+`macos-latest` matrix) on every push to `master`/`main` and on every pull
+request. This provides a public, independently-hosted verification that any
+account can inspect, as a weaker substitute for a true third-party run.
 
-**Executed run** (2026-11-18): commit `f254c22` on `master`, run
-`#44230159660`, workflow "CTBench-PQ Reproduction" — **completed
-successfully** in 16s; job exit status 0, which by `verify_anchors.py`'s
-contract (non-zero on any anchor miss) means all six anchors matched.
+**Executed runs** (2026-11-18):
+- Commit `f254c22` on `master`, run `#44230159660` — **completed successfully**
+  in 16s on `ubuntu-latest`.
+- Commit `d8c8029` on `master`, run `#44233550798` — **completed successfully**
+  in 10s on `ubuntu-latest`.
+- Commit `9ac89a2` on `master`, run `#44241622940` — **completed successfully**
+  in 9s on the **two-OS matrix** (`ubuntu-latest` + `macos-latest`).
+In each case the job exit status 0, which by `verify_anchors.py`'s contract
+(non-zero on any anchor miss), means all six anchors matched on every platform.
+
+A first three-OS attempt (commit `cbbd0c5`, run `#44240772791`) additionally
+showed that a `windows-latest` job fails at the `bash reproduce.sh` step (a
+Git-Bash / `python3` path limitation on the Windows runner), so the matrix is
+restricted to the two Unix platforms that pass; Windows is an explicitly
+documented follow-up (needs an explicit `shell: bash` step and a `python3`
+alias).
 
 
 ## Notes
