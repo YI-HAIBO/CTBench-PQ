@@ -1,6 +1,6 @@
 # CTBench-PQ Release Package
 
-**Repository** (public, finalized): `https://github.com/CTBench-PQ/CTBench-PQ`
+**Repository** (public, finalized): `https://github.com/YI-HAIBO/CTBench-PQ`
 **Release tag**: `v1.0`
 **Corresponding author**: haiboyi@szpu.edu.cn
 **Last evaluated**: 2026-11-12
