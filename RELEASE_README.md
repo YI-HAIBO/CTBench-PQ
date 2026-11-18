@@ -98,6 +98,22 @@ metrics + McNemar, (4) FDC-MI fusion. Expected key values:
 | measured fused F1 (Binsec+dudect) | 0.827 |
 | D1 recall ceiling (merged) | 0.633 |
 
+## Public CI reproduction (GitHub Actions)
+
+`./.github/workflows/reproduce.yml` re-runs the five-step pipeline
+(`reproduce.sh`: leakage check, merged ceiling, extended recompute, measured
+fusion, then the self-checking `analysis/verify_anchors.py` that asserts all
+six anchors above) on a fresh GitHub-hosted `ubuntu-latest` runner on every
+push to `master`/`main` and on every pull request. This provides a
+public, independently-hosted verification that any account can inspect,
+as a weaker substitute for a true third-party run.
+
+**Executed run** (2026-11-18): commit `f254c22` on `master`, run
+`#44230159660`, workflow "CTBench-PQ Reproduction" — **completed
+successfully** in 16s; job exit status 0, which by `verify_anchors.py`'s
+contract (non-zero on any anchor miss) means all six anchors matched.
+
+
 ## Notes
 
 - The D2/D2b variant `Atria-Dawn-Preview` merged-benchmark predictions are not released
