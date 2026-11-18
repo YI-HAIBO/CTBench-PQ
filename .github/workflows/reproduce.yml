@@ -1,9 +1,11 @@
 name: CTBench-PQ Reproduction
 
-# L4 独立环境复现替代：在 GitHub 托管的独立 runner（ubuntu-latest，与作者
-# Windows / VM Ubuntu 环境均不同）上运行 reproduce.sh，并断言 6 个论文核心
-# 结果锚点。这是对"真第三方独立团队复现"的自动化、可公开验证的替代——
-# 任何人对 master 的任何 commit 都能在 GitHub Actions 上看到复现是否通过。
+# L4 独立环境复现替代：在 GitHub 托管的独立 runner（ubuntu / macos / windows-latest，
+# 与作者 Windows / VM Ubuntu 环境均不同）上运行 reproduce.sh（5 步流水线），并断言
+# 6 个论文核心结果锚点。三平台矩阵把"独立环境复现"从单平台扩展到三个公共 CI 平台，
+# 是对"真第三方独立团队复现"的自动化、可公开验证替代——任何人对 master 的任何
+# commit 都能在 GitHub Actions 上看到复现是否通过。分析脚本为纯标准库（无 numpy/
+# scipy/pandas），三平台无需额外 pip 安装。
 on:
   push:
     branches: [ master, main ]
@@ -13,7 +15,11 @@ on:
 
 jobs:
   reproduce:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,7 +29,7 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Run reproduction (4 analysis steps)
+      - name: Run reproduction (5-step pipeline)
         run: bash reproduce.sh
 
       - name: Assert 6 core-result anchors
