@@ -1,0 +1,30 @@
+name: CTBench-PQ Reproduction
+
+# L4 独立环境复现替代：在 GitHub 托管的独立 runner（ubuntu-latest，与作者
+# Windows / VM Ubuntu 环境均不同）上运行 reproduce.sh，并断言 6 个论文核心
+# 结果锚点。这是对"真第三方独立团队复现"的自动化、可公开验证的替代——
+# 任何人对 master 的任何 commit 都能在 GitHub Actions 上看到复现是否通过。
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+  workflow_dispatch:
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Run reproduction (4 analysis steps)
+        run: bash reproduce.sh
+
+      - name: Assert 6 core-result anchors
+        run: python3 analysis/verify_anchors.py

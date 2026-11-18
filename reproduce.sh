@@ -4,17 +4,21 @@
 set -euo pipefail
 PY="${PYTHON:-python3}"
 
-echo "[1/4] Cross-set leakage check ..."
+echo "[1/5] Cross-set leakage check ..."
 "$PY" analysis/significance.py
 
-echo "[2/4] Merged-ceiling verification ..."
+echo "[2/5] Merged-ceiling verification ..."
 "$PY" analysis/verify_merged_ceiling.py
 
-echo "[3/4] Extended metrics + McNemar ..."
+echo "[3/5] Extended metrics + McNemar ..."
 "$PY" analysis/recompute_extended.py
 
-echo "[4/4] FDC-MI fusion (measured) ..."
+echo "[4/5] FDC-MI fusion (measured) ..."
 "$PY" analysis/fdc_mi_measured_fusion.py
+
+echo
+echo "[5/5] Assert core-result anchors ..."
+"$PY" analysis/verify_anchors.py
 
 echo
 echo "Expected anchors: merged-70 D1 F1=0.655; extended-92 D1 F1=0.548;"
